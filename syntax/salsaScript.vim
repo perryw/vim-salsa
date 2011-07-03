@@ -62,15 +62,17 @@ syn cluster salsaScriptRegions contains=salsaScriptBlock,salsaScriptExpression
 " erubis is much more flexible than SJS, so we just need to hard-code the
 " start & end tags
 " TODO: add highlighting for nested SJS e.g. <?@include 'foo?<?=query?>'?>
+" TODO: re-add SJS keywords
 " :h containedin & :h keepend
-exe 'syn region  salsaScriptBlock      matchgroup=salsaScriptDelimiter start=/<?/ end=/?>/ contains=@jsTop  containedin=ALLBUT,@salsaScriptRegions keepend'
-exe 'syn region  salsaScriptExpression matchgroup=salsaScriptDelimiter start=/<?=/ end=/?>/ contains=@jsTop  containedin=ALLBUT,@salsaScriptRegions keepend'
+exe 'syn region  salsaScriptBlock      matchgroup=salsaScriptDelimiter start=/<?/ end=/?>/ contains=@jsTop,salsaLib  containedin=ALLBUT,@salsaScriptRegions keepend fold'
+exe 'syn region  salsaScriptExpression matchgroup=salsaScriptDelimiter start=/<?=/ end=/?>/ contains=@jsTop,salsaLib  containedin=ALLBUT,@salsaScriptRegions,salsaScriptBlock keepend'
 exe 'syn region  salsaInclude matchgroup=salsaScriptInclude start=/<?@include/ end=/?>/ contains=htmlString,salsaScriptExpression keepend'
+exe 'syn keyword salsaLib contained Condition Crawler DB Email Flash Geo Graphics Java Locale Log Package Request Response Score Session salsa Supporter'
 
-" Define the default highlighting.
 
-hi def link salsaScriptDelimiter		PreProc
-hi def link salsaScriptInclude		Delimiter
+hi def link salsaScriptDelimiter	Preproc
+hi def link salsaScriptInclude		Preproc
+hi def link salsaLib				Identifier
 
 let b:current_syntax = 'salsaScript'
 
