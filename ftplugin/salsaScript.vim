@@ -55,7 +55,7 @@ endif
 
 " Change the :browse e filter to primarily show JSP-related files.
 if has("gui_win32")
-    let  b:browsefilter="SJS Files (*.sjs)\t*.js\n" . s:browsefilter
+    let  b:browsefilter="SJS Files (*.sjs)\t*.sjs\n" . s:browsefilter
 endif
 
 " Undo the stuff we changed.
