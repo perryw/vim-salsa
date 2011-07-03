@@ -1,63 +1,81 @@
 " Vim Syntax File
 " Language: SalsaScript
 " Author: Perry Wong <pwong@salsalabs.com>
-" Adapted from jsp.vim
+" Adapted from eruby.vim
 
-if version < 600
-  syntax clear
-elseif exists("b:current_syntax")
-	finish
+if exists("b:current_syntax")
+  finish
 endif
 
 if !exists("main_syntax")
   let main_syntax = 'salsaScript'
 endif
 
-" Source HTML syntax
-if version < 600
-  source <sfile>:p:h/html.vim
-else
-  runtime! syntax/html.vim
+if !exists("g:salsaScript_default_subtype")
+  let g:salsaScript_default_subtype = "html"
 endif
-unlet b:current_syntax
 
-" Next syntax items are case-sensitive
-syn case match
+if !exists("b:salsaScript_subtype") && main_syntax == 'salsaScript'
+  "let s:lines = getline(1)."\n".getline(2)."\n".getline(3)."\n".getline(4)."\n".getline(5)."\n".getline("$")
+  "let b:salsaScript_subtype = matchstr(s:lines,'salsaScript_subtype=\zs\w\+')
+  "if b:salsaScript_subtype == ''
+  "  let b:salsaScript_subtype = matchstr(&filetype,'^salsaScript\.\zs\w\+')
+  "endif
+  "if b:salsaScript_subtype == ''
+  "  let b:salsaScript_subtype = matchstr(substitute(expand("%:t"),'\c\%(\.sjs\|\.salsaScript\)\+$','',''),'\.\zs\w\+$')
+  "endif
 
-" Include JavaScript syntax
-syn include @sjsJavaScript syntax/javascript.vim
+  " should never be anything other than html
+  "if b:salsaScript_subtype == 'rhtml'
+  "  let b:salsaScript_subtype = 'html'
+  "elseif b:salsaScript_subtype == 'rb'
+  "  let b:salsaScript_subtype = 'ruby'
+  "elseif b:salsaScript_subtype == 'yml'
+  "  let b:salsaScript_subtype = 'yaml'
+  "elseif b:salsaScript_subtype == 'js'
+  "  let b:salsaScript_subtype = 'javascript'
+  "elseif b:salsaScript_subtype == 'txt'
+  "  " Conventional; not a real file type
+  "  let b:salsaScript_subtype = 'text'
+  "elseif b:salsaScript_subtype == ''
+  "  let b:salsaScript_subtype = g:salsaScript_default_subtype
+  "endif
 
-syn region sjsScriptlet matchgroup=sjsTag start=/<?/  keepend end=/?>/ contains=@sjsJavaScript,sjsObject
-syn region sjsExpr	matchgroup=sjsTag start=/<?=/ keepend end=/?>/ contains=@sjsJavaScript,sjsObject
-syn region sjsInclude			  start=/<?@include/	      end=/?>/ contains=htmlString
+  let b:salsaScript_subtype = g:salsaScript_default_subtype
+endif
 
-syn keyword sjsObject contained Request Response DB salsa Condition Crawler DB Email Flash Geo Graphics Java Locale Log Object Package Request Response Score Session String Supporter
+if !exists("b:salsaScript_nest_level")
+  let b:salsaScript_nest_level = strlen(substitute(substitute(substitute(expand("%:t"),'@','','g'),'\c\.\%(sjs\)\>','@','g'),'[^@]','','g'))
+endif
+if !b:salsaScript_nest_level
+  let b:salsaScript_nest_level = 1
+endif
 
-" Redefine htmlTag so that it can contain jspExpr
-syn clear htmlTag
-syn region htmlTag start=+<[^/?]+ end=+>+ contains=htmlTagN,htmlString,htmlArg,htmlValue,htmlTagError,htmlEvent,htmlCssDefinition,@htmlPreproc,@htmlArgCluster,sjsExpr,javaScript
+if exists("b:salsaScript_subtype") && b:salsaScript_subtype != ''
+  exe "runtime! syntax/".b:salsaScript_subtype.".vim"
+  unlet! b:current_syntax
+endif
+syn include @jsTop syntax/javascript.vim
+
+syn cluster salsaScriptRegions contains=salsaScriptBlock,salsaScriptExpression
+
+" erubis is much more flexible than SJS, so we just need to hard-code the
+" start & end tags
+" TODO: add highlighting for nested SJS e.g. <?@include 'foo?<?=query?>'?>
+" :h containedin & :h keepend
+exe 'syn region  salsaScriptBlock      matchgroup=salsaScriptDelimiter start=/<?/ end=/?>/ contains=@jsTop  containedin=ALLBUT,@salsaScriptRegions keepend'
+exe 'syn region  salsaScriptExpression matchgroup=salsaScriptDelimiter start=/<?=/ end=/?>/ contains=@jsTop  containedin=ALLBUT,@salsaScriptRegions keepend'
+exe 'syn region  salsaInclude matchgroup=salsaScriptInclude start=/<?@include/ end=/?>/ contains=htmlString,salsaScriptExpression keepend'
 
 " Define the default highlighting.
-" For version 5.7 and earlier: only when not done already
-" For version 5.8 and later: only when an item doesn't have highlighting yet
-if version >= 508 || !exists("did_sjs_syn_inits")
-  if version < 508
-    let did_sjs_syn_inits = 1
-    command -nargs=+ HiLink hi link <args>
-  else
-    command -nargs=+ HiLink hi def link <args>
-  endif
-  " Be consistent with html highlight settings
-  HiLink sjsTag		 htmlTag
-  HiLink sjsInclude	 sjsTag
-  HiLink sjsObject	Identifier
-  delcommand HiLink
-endif
+
+hi def link salsaScriptDelimiter		PreProc
+hi def link salsaScriptInclude		Delimiter
+
+let b:current_syntax = 'salsaScript'
 
 if main_syntax == 'salsaScript'
   unlet main_syntax
 endif
-
-let b:current_syntax = "salsaScript"
 
 " vim: ts=4
