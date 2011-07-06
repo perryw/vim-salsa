@@ -24,21 +24,22 @@ unlet! b:current_syntax
 syn include @jsTop syntax/javascript.vim
 syn include @css syntax/css.vim
 
-syn cluster salsaScriptRegions contains=salsaScriptBlock,salsaScriptExpression,javaScript
+syn cluster sjsRegions contains=sjsBlock,sjsExpression,javaScript
 
 " erubis is much more flexible than SJS, so we just need to hard-code the
 " start & end tags
-" TODO: add highlighting for nested SJS e.g. <?@include 'foo?<?=query?>'?>
-" :h containedin & :h keepend
 " adding fold argument folds the entire region, not the code or tags inside
-syn region  salsaScriptBlock      matchgroup=salsaScriptDelimiter start=/<?/ end=/?>/ contains=@jsTop,salsaLib keepend
-syn region  salsaScriptExpression matchgroup=salsaScriptDelimiter start=/<?=/ end=/?>/ contains=@jsTop,salsaLib keepend
-syn region  salsaInclude matchgroup=salsaScriptInclude start=/<?@include/ end=/?>/ contains=htmlString,salsaScriptExpression keepend
-syn keyword salsaLib contained Condition Crawler DB Email Flash Geo Graphics Java Locale Log Package Request Response Score Session salsa Supporter
+" TODO <?@include 'foo?bar=<?=baz?>' incorrectly identifies the = inside <?=
+" as javascriptAssignOp
+syn keyword sjsLib contained Condition Crawler DB Email Flash Geo Graphics Java Locale Log Package Request Response Score Session salsa Supporter
+syn region  sjsExpression start=/<?=/ end=/?>/ contains=@jsTop,sjsLib containedin=ALLBUT,sjsExpression,sjsBlock
+syn region  sjsInclude start=/<?@include/ end=/?>/ contains=htmlString,sjsExpression containedin=ALLBUT,sjsExpression
+syn region  sjsBlock      start=/<?/ end=/?>/ contains=@jsTop,sjsLib,sjsInclude
 
-hi def link salsaScriptDelimiter	Preproc
-hi def link salsaScriptInclude		Preproc
-hi def link salsaLib				Identifier
+hi def link sjsBlock	Preproc
+hi def link sjsExpression	Preproc
+hi def link sjsInclude		Preproc
+hi def link sjsLib				Identifier
 
 " enable JS folding from javascript.vim
 syntax match   javaScriptFunction       /\<function\>/ nextgroup=javaScriptFuncName skipwhite
