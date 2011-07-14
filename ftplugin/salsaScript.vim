@@ -53,6 +53,32 @@ if exists("loaded_matchit")
     let b:match_words = s:match_words
 endif
 
+inoremap {}<CR> {<CR><Tab><CR><Backspace>}<Up><End>
+
+" map each number to its shift-key character
+inoremap 1 !
+inoremap 2 @
+inoremap 3 #
+inoremap 4 $
+inoremap 5 %
+inoremap 6 ^
+inoremap 7 &
+inoremap 8 *
+inoremap 9 (
+inoremap 0 )
+
+" and then the opposite
+inoremap ! 1
+inoremap @ 2
+inoremap # 3
+inoremap $ 4
+inoremap % 5
+inoremap ^ 6
+inoremap & 7
+inoremap * 8
+inoremap ( 9
+inoremap ) 0
+
 " Change the :browse e filter to primarily show JSP-related files.
 if has("gui_win32")
     let  b:browsefilter="SJS Files (*.sjs)\t*.sjs\n" . s:browsefilter
