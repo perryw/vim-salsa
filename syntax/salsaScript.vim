@@ -34,7 +34,7 @@ syn cluster sjsRegions contains=sjsBlock,sjsExpression,javaScript
 syn keyword sjsLib contained Condition Crawler DB Email Flash Geo Graphics Java Locale Log Package Request Response Score Session salsa Supporter
 syn region  sjsExpression start=/<?=/ end=/?>/ contains=@jsTop,sjsLib containedin=ALLBUT,sjsExpression,sjsBlock
 syn region  sjsInclude start=/<?@include/ end=/?>/ contains=htmlString,sjsExpression containedin=ALLBUT,sjsExpression
-syn region  sjsBlock      start=/<?/ end=/?>/ contains=@jsTop,sjsLib,sjsInclude
+syn region  sjsBlock      start=/<?/ end=/?>/ contains=@jsTop,sjsLib,sjsInclude containedin=ALLBUT,sjsInclude,sjsBlock
 
 hi def link sjsBlock	Preproc
 hi def link sjsExpression	Preproc
