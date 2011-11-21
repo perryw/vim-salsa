@@ -31,15 +31,15 @@ syn cluster sjsRegions contains=sjsBlock,sjsExpression,javaScript
 " adding fold argument folds the entire region, not the code or tags inside
 " TODO <?@include 'foo?bar=<?=baz?>' incorrectly identifies the = inside <?=
 " as javascriptAssignOp
-syn keyword sjsLib contained Condition Crawler DB Email Flash Geo Graphics Java Locale Log Package Request Response Score Session salsa Supporter
+syn keyword sjsLib contained Condition Crawler DB Email Flash Geo Graphics Java Locale Log Package Request Response Score Session salsa Supporter Form Input
+syn region  sjsBlock      start=/<?/ end=/?>/ contains=@jsTop,sjsLib,sjsInclude containedin=ALLBUT,sjsBlock,sjsExpression,sjsInclude
 syn region  sjsExpression start=/<?=/ end=/?>/ contains=@jsTop,sjsLib containedin=ALLBUT,sjsExpression,sjsBlock
 syn region  sjsInclude start=/<?@include/ end=/?>/ contains=htmlString,sjsExpression containedin=ALLBUT,sjsExpression
-syn region  sjsBlock      start=/<?/ end=/?>/ contains=@jsTop,sjsLib,sjsInclude containedin=ALLBUT,sjsInclude,sjsBlock
 
 hi def link sjsBlock	Preproc
-hi def link sjsExpression	Preproc
+hi def link sjsExpression	Statement
 hi def link sjsInclude		Preproc
-hi def link sjsLib				Identifier
+hi def link sjsLib			Type
 
 " enable JS folding from javascript.vim
 syntax match   javaScriptFunction       /\<function\>/ nextgroup=javaScriptFuncName skipwhite
