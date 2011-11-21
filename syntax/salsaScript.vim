@@ -32,11 +32,12 @@ syn cluster sjsRegions contains=sjsBlock,sjsExpression,javaScript
 " TODO <?@include 'foo?bar=<?=baz?>' incorrectly identifies the = inside <?=
 " as javascriptAssignOp
 syn keyword sjsLib contained Condition Crawler DB Email Flash Geo Graphics Java Locale Log Package Request Response Score Session salsa Supporter Form Input
-syn region  sjsBlock      start=/<?/ end=/?>/ contains=@jsTop,sjsLib,sjsInclude containedin=ALLBUT,sjsBlock,sjsExpression,sjsInclude
-syn region  sjsExpression start=/<?=/ end=/?>/ contains=@jsTop,sjsLib containedin=ALLBUT,sjsExpression,sjsBlock
+syn region  sjsBlock matchgroup=sjsBlockToken start=/<?/ end=/?>/ contains=@jsTop,sjsLib,sjsInclude containedin=ALLBUT,sjsBlock,sjsExpression,sjsInclude
+syn region  sjsExpression matchgroup=sjsExpressionToken start=/<?=/ end=/?>/ contains=@jsTop,sjsLib containedin=ALLBUT,sjsExpression,sjsBlock
 syn region  sjsInclude start=/<?@include/ end=/?>/ contains=htmlString,sjsExpression containedin=ALLBUT,sjsExpression
 
-hi def link sjsBlock	Preproc
+hi def link sjsBlockToken	Preproc
+hi def link sjsExpressionToken	Preproc
 hi def link sjsExpression	Statement
 hi def link sjsInclude		Preproc
 hi def link sjsLib			Type
