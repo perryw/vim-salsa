@@ -26,7 +26,7 @@ endif
 
 " get SQL highlighting in java strings
 syn include @sqlTop syntax/mysql.vim
-syn cluster javaAddStrings contains=@sqlTop
+"syn cluster javaAddStrings contains=@sqlTop
 syn cluster sqlTop remove=mysqlString,mysqlComment
 
 " some characters that cannot be in a java program (outside a string)
