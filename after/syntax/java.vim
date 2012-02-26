@@ -18,5 +18,5 @@ else
 endif
 
 syn cluster sqlTop remove=mysqlString,mysqlComment
-syn region javaSQL start=+"+rs=e end=+"+re=s end=+$+ contains=@sqlTop containedin=javaString keepend
+syn region javaString start=+"+ end=+"+ end=+$+ contains=@sqlTop containedin=javaString keepend
 
