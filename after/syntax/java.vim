@@ -18,6 +18,7 @@ else
 endif
 
 syn cluster sqlTop remove=mysqlString,mysqlComment
+" re-use javaString region name
 syn region javaString start=+"+ end=+"+ end=+$+ contains=@sqlTop containedin=javaString keepend
 syn match javaUpper "\s*\<\u\w\+\>" containedin=NONE " \> and \< are word boundaries
 hi def link javaUpper keyword
