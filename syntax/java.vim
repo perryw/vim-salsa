@@ -24,11 +24,6 @@ else
   command! -nargs=+ JavaHiLink hi def link <args>
 endif
 
-" get SQL highlighting in java strings
-syn include @sqlTop syntax/mysql.vim
-"syn cluster javaAddStrings contains=@sqlTop
-syn cluster sqlTop remove=mysqlString,mysqlComment
-
 " some characters that cannot be in a java program (outside a string)
 syn match javaError "[\\@`]"
 syn match javaError "<<<\|\.\.\|=>\|<>\|||=\|&&=\|[^-]->\|\*\/"
@@ -185,7 +180,7 @@ syn match   javaComment		 "/\*\*/"
 syn match   javaSpecialError     contained "\\."
 syn match   javaSpecialCharError contained "[^']"
 syn match   javaSpecialChar      contained "\\\([4-9]\d\|[0-3]\d\d\|[\"\\'ntbrf]\|u\x\{4\}\)"
-syn region  javaString		start=+"+ end=+"+ end=+$+ contains=javaSpecialChar,javaSpecialError,@Spell,@javaAddStrings
+syn region  javaString		start=+"+ end=+"+ end=+$+ contains=javaSpecialChar,javaSpecialError,@Spell
 " next line disabled, it can cause a crash for a long line
 "syn match   javaStringError	  +"\([^"\\]\|\\.\)*$+
 syn match   javaCharacter	 "'[^']*'" contains=javaSpecialChar,javaSpecialCharError
